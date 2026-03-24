@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🌸 Spend Cute</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff5fb;
+  --card:#ffffff;
+  --text:#3a3a5c;
+  --muted:#9999bb;
+  --border:#f0e6f6;
+  --accent:#ff6eb4;
+  --accent2:#a78bfa;
+  --green:#6bcb77;
+  --red:#ff6b6b;
+  --yellow:#ffd93d;
+  --radius:20px;
+  --shadow:0 4px 24px #ff6eb415;
+}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  background-image:radial-gradient(circle at 80% 10%, #fce4f355 0%, transparent 50%),
+                   radial-gradient(circle at 10% 90%, #e4eaff55 0%, transparent 50%);
+  min-height:100vh;
+  color:var(--text);
+  padding:32px 16px 100px;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+h1{
+  font-family:'Fredoka One',cursive;
+  font-size:2.6rem;
+  color:var(--accent);
+  text-align:center;
+  margin-bottom:4px;
+  letter-spacing:0.01em;
+}
+.subtitle{
+  font-size:0.82rem;font-weight:700;color:var(--muted);
+  text-align:center;margin-bottom:28px;letter-spacing:0.06em;
+}
+
+.main{width:100%;max-width:480px;display:flex;flex-direction:column;gap:18px;}
+
+/* Budget bar */
+.budget-card{
+  background:var(--card);border-radius:var(--radius);
+  padding:22px 24px;box-shadow:var(--shadow);
+  border:1.5px solid var(--border);
+}
+.budget-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.budget-label{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--muted);}
+.budget-edit{background:none;border:1.5px solid var(--border);border-radius:50px;
+  padding:5px 14px;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;
+  color:var(--accent);cursor:pointer;transition:all 0.2s;}
+.budget-edit:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+.budget-amounts{display:flex;justify-content:space-between;margin-bottom:12px;}
+.ba-item{text-align:center;}
+.ba-val{font-family:'Fredoka One',cursive;font-size:1.5rem;line-height:1;}
+.ba-lbl{font-size:0.65rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;}
+.ba-spent .ba-val{color:var(--red);}
+.ba-left  .ba-val{color:var(--green);}
+.ba-total .ba-val{color:var(--accent2);}
+
+.bar-wrap{background:#f5eeff;border-radius:99px;height:12px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:99px;transition:width 0.6s cubic-bezier(.34,1.2,.64,1);
+  background:linear-gradient(90deg,#ff6eb4,#a78bfa);}
+.bar-fill.danger{background:linear-gradient(90deg,#ff6b6b,#ff9f43);}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.stat-card{
+  background:var(--card);border-radius:16px;padding:16px 10px;
+  box-shadow:var(--shadow);border:1.5px solid var(--border);
+  text-align:center;
+}
+.stat-icon{font-size:1.5rem;margin-bottom:4px;}
+.stat-val{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--text);line-height:1;}
+.stat-lbl{font-size:0.62rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-top:3px;}
+
+/* Add form */
+.add-card{
+  background:var(--card);border-radius:var(--radius);
+  padding:22px 24px;box-shadow:var(--shadow);
+  border:1.5px solid var(--border);
+}
+.add-title{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--text);margin-bottom:14px;}
+.form-row{display:flex;gap:10px;margin-bottom:10px;}
+.form-row input,.form-row select{
+  flex:1;border:1.5px solid var(--border);border-radius:12px;
+  padding:11px 14px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:700;
+  color:var(--text);background:#fafafa;outline:none;
+  transition:border-color 0.2s;
+}
+.form-row input:focus,.form-row select:focus{border-color:var(--accent);}
+.form-row input::placeholder{color:#bbb;}
+.amt-input{max-width:120px;}
+.btn-add{
+  width:100%;background:linear-gradient(135deg,#ff6eb4,#a78bfa);
+  border:none;border-radius:12px;padding:13px;
+  color:#fff;font-family:'Fredoka One',cursive;font-size:1.05rem;
+  cursor:pointer;box-shadow:0 4px 16px #ff6eb433;
+  transition:transform 0.15s,box-shadow 0.15s;
+  letter-spacing:0.02em;
+}
+.btn-add:hover{transform:scale(1.02);box-shadow:0 6px 22px #ff6eb455;}
+.btn-add:active{transform:scale(0.98);}
+
+/* Category chips */
+.cat-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.chip{
+  background:#f5eeff;border:1.5px solid transparent;border-radius:50px;
+  padding:5px 13px;font-size:0.75rem;font-weight:800;color:var(--muted);
+  cursor:pointer;transition:all 0.15s;
+}
+.chip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.chip:hover:not(.active){border-color:var(--accent);color:var(--accent);}
+
+/* Expense list */
+.list-card{
+  background:var(--card);border-radius:var(--radius);
+  padding:22px 24px;box-shadow:var(--shadow);
+  border:1.5px solid var(--border);
+}
+.list-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.list-title{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--text);}
+.clear-btn{background:none;border:none;font-size:0.75rem;font-weight:800;
+  color:var(--muted);cursor:pointer;transition:color 0.2s;}
+.clear-btn:hover{color:var(--red);}
+
+.expense-list{display:flex;flex-direction:column;gap:9px;}
+.expense-item{
+  display:flex;align-items:center;gap:12px;
+  background:#fafafa;border-radius:14px;padding:12px 14px;
+  border:1.5px solid var(--border);
+  animation:slideIn 0.25s ease both;
+  transition:transform 0.15s;
+}
+.expense-item:hover{transform:translateX(3px);}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+.exp-emoji{font-size:1.5rem;flex-shrink:0;}
+.exp-info{flex:1;min-width:0;}
+.exp-name{font-size:0.88rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.exp-meta{font-size:0.7rem;font-weight:700;color:var(--muted);margin-top:1px;}
+.exp-amt{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--red);flex-shrink:0;}
+.exp-del{background:none;border:none;color:#ddd;font-size:1rem;cursor:pointer;
+  flex-shrink:0;transition:color 0.2s;padding:2px 6px;}
+.exp-del:hover{color:var(--red);}
+
+.empty{text-align:center;padding:30px 0;color:var(--muted);font-size:0.85rem;font-weight:700;}
+.empty-icon{font-size:2.5rem;margin-bottom:8px;}
+
+/* Budget modal */
+.modal-overlay{
+  position:fixed;inset:0;background:#0006;backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;z-index:100;
+  animation:fadeIn 0.2s;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  background:#fff;border-radius:24px;padding:28px;width:90%;max-width:340px;
+  box-shadow:0 20px 60px #0002;animation:popIn 0.3s cubic-bezier(.34,1.56,.64,1);
+  text-align:center;
+}
+@keyframes popIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+.modal h2{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--text);margin-bottom:16px;}
+.modal input{
+  width:100%;border:1.5px solid var(--border);border-radius:12px;
+  padding:12px 16px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;
+  color:var(--text);outline:none;text-align:center;margin-bottom:14px;
+}
+.modal input:focus{border-color:var(--accent);}
+.modal-btns{display:flex;gap:10px;}
+.modal-btns button{flex:1;padding:11px;border-radius:12px;font-family:'Fredoka One',cursive;
+  font-size:1rem;cursor:pointer;border:none;transition:transform 0.15s;}
+.btn-cancel{background:#f5eeff;color:var(--muted);}
+.btn-save{background:linear-gradient(135deg,#ff6eb4,#a78bfa);color:#fff;}
+.btn-save:hover,.btn-cancel:hover{transform:scale(1.03);}
+</style>
+</head>
+<body>
+
+<h1>🌸 Spend Cute</h1>
+
+<div class="main">
+
+  <!-- Budget bar -->
+  <div class="budget-card">
+    <div class="budget-top">
+      <span class="budget-label">Monthly Budget</span>
+      <button class="budget-edit" onclick="openModal()">✏️ Set Budget</button>
+    </div>
+    <div class="budget-amounts">
+      <div class="ba-item ba-spent"><div class="ba-val" id="spent-val">$0</div><div class="ba-lbl">Spent</div></div>
+      <div class="ba-item ba-left"><div class="ba-val" id="left-val">$0</div><div class="ba-lbl">Left</div></div>
+      <div class="ba-item ba-total"><div class="ba-val" id="budget-val">$0</div><div class="ba-lbl">Budget</div></div>
+    </div>
+    <div class="bar-wrap"><div class="bar-fill" id="bar-fill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-icon">🛍️</div><div class="stat-val" id="s-count">0</div><div class="stat-lbl">Purchases</div></div>
+    <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-val" id="s-today">$0</div><div class="stat-lbl">Today</div></div>
+    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val" id="s-top">—</div><div class="stat-lbl">Top Category</div></div>
+  </div>
+
+  <!-- Add expense -->
+  <div class="add-card">
+    <div class="add-title">➕ Add Expense</div>
+    <div class="form-row">
+      <input type="text" id="exp-name" placeholder="What did you buy?"/>
+      <input type="number" id="exp-amt" class="amt-input" placeholder="$0.00" min="0" step="0.01"/>
+    </div>
+    <div class="cat-chips" id="cat-chips"></div>
+    <button class="btn-add" onclick="addExpense()">Add to my spending 💸</button>
+  </div>
+
+  <!-- List -->
+  <div class="list-card">
+    <div class="list-top">
+      <div class="list-title">📋 My Expenses</div>
+      <button class="clear-btn" onclick="clearAll()">Clear all</button>
+    </div>
+    <div class="expense-list" id="expense-list"></div>
+  </div>
+
+</div>
+
+<!-- Budget modal -->
+<div class="modal-overlay" id="modal" style="display:none">
+  <div class="modal">
+    <h2>💰 Set Your Budget</h2>
+    <input type="number" id="budget-input" placeholder="e.g. 1000" min="0"/>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveBudget()">Save ✨</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CATS = [
+  {label:'🍔 Food',key:'food'},
+  {label:'🛍️ Shopping',key:'shopping'},
+  {label:'🚗 Transport',key:'transport'},
+  {label:'🎬 Fun',key:'fun'},
+  {label:'💊 Health',key:'health'},
+  {label:'🏠 Home',key:'home'},
+  {label:'📦 Other',key:'other'},
+];
+
+let expenses = JSON.parse(localStorage.getItem('spcute-expenses')||'[]');
+let budget   = parseFloat(localStorage.getItem('spcute-budget')||'1000');
+let selCat   = 'food';
+
+// demo data
+if(!expenses.length){
+  const today = new Date().toISOString();
+  expenses = [
+    {id:1,name:'Iced latte ☕',amount:6.50,cat:'food',date:today},
+    {id:2,name:'New top 👕',amount:32.00,cat:'shopping',date:today},
+    {id:3,name:'Uber ride',amount:14.75,cat:'transport',date:today},
+    {id:4,name:'Movie ticket 🎬',amount:18.00,cat:'fun',date:today},
+  ];
+  save();
+}
+
+function save(){
+  localStorage.setItem('spcute-expenses', JSON.stringify(expenses));
+  localStorage.setItem('spcute-budget', budget);
+}
+
+function fmt(n){ return '$'+n.toFixed(2); }
+
+function renderChips(){
+  const wrap = document.getElementById('cat-chips');
+  wrap.innerHTML = CATS.map(c=>`
+    <div class="chip${c.key===selCat?' active':''}" onclick="selCat='${c.key}';renderChips()">${c.label}</div>
+  `).join('');
+}
+
+function addExpense(){
+  const name = document.getElementById('exp-name').value.trim();
+  const amt  = parseFloat(document.getElementById('exp-amt').value);
+  if(!name || isNaN(amt) || amt<=0) return;
+  expenses.unshift({id:Date.now(),name,amount:amt,cat:selCat,date:new Date().toISOString()});
+  document.getElementById('exp-name').value='';
+  document.getElementById('exp-amt').value='';
+  save(); render();
+}
+
+function deleteExp(id){
+  expenses = expenses.filter(e=>e.id!==id);
+  save(); render();
+}
+
+function clearAll(){
+  if(!expenses.length) return;
+  expenses=[];save();render();
+}
+
+function openModal(){
+  document.getElementById('budget-input').value=budget;
+  document.getElementById('modal').style.display='flex';
+}
+function closeModal(){ document.getElementById('modal').style.display='none'; }
+function saveBudget(){
+  const v=parseFloat(document.getElementById('budget-input').value);
+  if(!isNaN(v)&&v>0){budget=v;save();render();}
+  closeModal();
+}
+
+function topCat(){
+  const totals={};
+  expenses.forEach(e=>{ totals[e.cat]=(totals[e.cat]||0)+e.amount; });
+  const top=Object.entries(totals).sort((a,b)=>b[1]-a[1])[0];
+  if(!top) return '—';
+  const cat=CATS.find(c=>c.key===top[0]);
+  return cat ? cat.label.split(' ')[0] : '—';
+}
+
+function todayTotal(){
+  const today=new Date().toDateString();
+  return expenses.filter(e=>new Date(e.date).toDateString()===today).reduce((s,e)=>s+e.amount,0);
+}
+
+function render(){
+  const spent=expenses.reduce((s,e)=>s+e.amount,0);
+  const left=Math.max(0,budget-spent);
+  const pct=Math.min(100,(spent/budget)*100)||0;
+
+  document.getElementById('spent-val').textContent=fmt(spent);
+  document.getElementById('left-val').textContent=fmt(left);
+  document.getElementById('budget-val').textContent=fmt(budget);
+
+  const bar=document.getElementById('bar-fill');
+  bar.style.width=pct+'%';
+  bar.className='bar-fill'+(pct>85?' danger':'');
+
+  document.getElementById('s-count').textContent=expenses.length;
+  document.getElementById('s-today').textContent=fmt(todayTotal());
+  document.getElementById('s-top').textContent=topCat();
+
+  const list=document.getElementById('expense-list');
+  if(!expenses.length){
+    list.innerHTML=`<div class="empty"><div class="empty-icon">🌸</div>No expenses yet! Go treat yourself~</div>`;
+    return;
+  }
+  const catMap=Object.fromEntries(CATS.map(c=>[c.key,c.label.split(' ')[0]]));
+  list.innerHTML=expenses.map(e=>{
+    const d=new Date(e.date);
+    const ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<div class="expense-item">
+      <div class="exp-emoji">${catMap[e.cat]||'📦'}</div>
+      <div class="exp-info">
+        <div class="exp-name">${e.name}</div>
+        <div class="exp-meta">${CATS.find(c=>c.key===e.cat)?.label.replace(/^.+ /,'')|| e.cat} · ${ds}</div>
+      </div>
+      <div class="exp-amt">${fmt(e.amount)}</div>
+      <button class="exp-del" onclick="deleteExp(${e.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('exp-amt').addEventListener('keydown',e=>{ if(e.key==='Enter') addExpense(); });
+document.getElementById('exp-name').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('exp-amt').focus(); });
+document.getElementById('modal').addEventListener('click',e=>{ if(e.target===document.getElementById('modal')) closeModal(); });
+
+renderChips(); render();
+</script>
+</body>
+</html>
