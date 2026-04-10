@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task Board — Portfolio Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="stylesToDo.css"/>
+</head>
+<body>
+
+<header>
+  <h1>Task<span>Board</span></h1>
+  <p>Portfolio Project · Interactive To-Do App</p>
+</header>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num" id="stat-total">0</div>
+    <div class="stat-label">Total</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-active">0</div>
+    <div class="stat-label">Active</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-done">0</div>
+    <div class="stat-label">Done</div>
+  </div>
+</div>
+
+<div class="input-row">
+  <input type="text" id="task-input" placeholder="Add a new task…" maxlength="120"/>
+  <div class="select-wrap">
+    <select id="tag-select">
+      <option value="work">Work</option>
+      <option value="personal">Personal</option>
+      <option value="design">Design</option>
+      <option value="code">Code</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  <button class="btn-add" onclick="addTask()">+ Add</button>
+</div>
+
+<div class="filter-row">
+  <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+  <button class="filter-btn" onclick="setFilter('active', this)">Active</button>
+  <button class="filter-btn" onclick="setFilter('done', this)">Done</button>
+  <button class="filter-btn" onclick="setFilter('work', this)">Work</button>
+  <button class="filter-btn" onclick="setFilter('personal', this)">Personal</button>
+  <button class="filter-btn" onclick="setFilter('design', this)">Design</button>
+  <button class="filter-btn" onclick="setFilter('code', this)">Code</button>
+</div>
+
+<div class="task-list" id="task-list"></div>
+
+<button class="clear-btn" onclick="clearDone()">Clear completed</button>
+
+<script src="appToDo.js"></script>
+</body>
+</html>
